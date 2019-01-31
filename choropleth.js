@@ -59,16 +59,14 @@ var Choropleth = function (_Component) {
           mode = _props.mode,
           steps = _props.steps,
           scale = _props.scale,
+          range = _props.range,
           cl = _props.colors;
 
       var colors = {};
       var features = Array.isArray(data) ? data : data.features;
 
-      var values = features.map(function (item) {
-        return _this2.isFunction(valueProperty) ? valueProperty(item) : item.properties[valueProperty];
-      });
-
-      colors.limits = _chromaJs2.default.limits(values, mode, steps - 1);
+      // Use range to get color steps
+      colors.limits = _chromaJs2.default.limits(range, mode, steps - 1);
       colors.colors = cl || _chromaJs2.default.scale(scale).colors(steps);
       return colors;
     }
@@ -130,7 +128,7 @@ var Choropleth = function (_Component) {
       var _props3 = this.props,
           layerContainer = _props3.layerContainer,
           identity = _props3.identity,
-          options = _objectWithoutProperties(_props3, ['layerContainer', 'identity']); //remove 
+          options = _objectWithoutProperties(_props3, ['layerContainer', 'identity']); //remove
 
 
       return _react2.default.createElement(

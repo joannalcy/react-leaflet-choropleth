@@ -10,15 +10,12 @@ export default class Choropleth extends Component {
   }
 
   getColors() {
-    const { data, valueProperty, mode, steps, scale, colors: cl } = this.props
+    const { data, valueProperty, mode, steps, scale, range, colors: cl } = this.props
     const colors = {}
     const features = Array.isArray(data) ? data : data.features
 
-    const values = features.map(item => this.isFunction(valueProperty)
-      ? valueProperty(item)
-      : item.properties[valueProperty])
-
-    colors.limits = chroma.limits(values, mode, steps - 1)
+    // Use range to get color steps
+    colors.limits = chroma.limits(range, mode, steps - 1)
     colors.colors = cl || chroma.scale(scale).colors(steps)
     return colors
   }
@@ -66,7 +63,7 @@ export default class Choropleth extends Component {
   render(){
     const features = Array.isArray(this.props.data) ? this.props.data : this.props.data.features
     const chroms = this.getColors()
-    const { layerContainer, identity, ...options } = this.props //remove 
+    const { layerContainer, identity, ...options } = this.props //remove
     return (
       <FeatureGroup map={this.props.map} layerContainer={layerContainer} ref={ (layer) => layer ? this.leafletElement = layer.leafletElement : null } >
         {features.map( (feature, idx) =>
